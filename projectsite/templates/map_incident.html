@@ -1,0 +1,94 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Dashboard</h4>
+        <ul class="breadcrumbs">
+            <li class="nav-home">
+                <a href="#">
+                    <i class="flaticon-home"></i>
+                </a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Maps</a>
+            </li>
+            <li class="separator">
+                <i class="flaticon-right-arrow"></i>
+            </li>
+            <li class="nav-item">
+                <a href="#">Incidents</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-transparent">
+                <div class="card-header">
+                    <h4 class="card-title text-center">Fire Incidents</h4>
+                    <p class="card-category text-center">Looks great on any resolution. Made by our friends from <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>.</p>
+                </div>
+                <div class="card-body">
+                    <div class="col-md-10 ml-auto mr-auto">
+                        <div id="map" style="width: 100%; height: 400px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script>
+    var map = L.map('map').setView([9.81644, 118.72239], 13);
+    var fireIcon = L.icon({
+    iconUrl: '../static/img/fire.png', // Replace with the path to your red marker icon
+    iconSize: [50, 50], // Adjust the size as needed
+    });
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+        var markers = L.markerClusterGroup();
+
+        var markerData = {{ incidentData|safe }};
+
+        function updateMarkers(city) {
+            markers.clearLayers();
+
+        markerData.forEach(function (data) {
+            if (city === 'all' || data.city === city) {
+            var latitude = parseFloat(data.latitude);
+            var longitude = parseFloat(data.longitude);
+
+        var marker = L.marker([latitude, longitude], { icon: fireIcon });
+
+        var popupContent = '<strong>' + data.description + '</strong><br>' +
+                           'Severity: ' + data.severity_level + '<br>' +
+                           'Date/Time: ' + data.date_time + '<br>' +
+                           data.address + '<br>' +
+                           data.city;
+
+        marker.bindPopup(popupContent);
+
+        marker.on('mouseover', function(e) {
+          this.openPopup();
+        });
+
+        marker.on('mouseout', function(e) {
+          this.closePopup();
+        });
+
+        markers.addLayer(marker); 
+        }
+    });
+
+    map.addLayer(markers);
+}
+
+    updateMarkers('all');
+</script>
+{% endblock %}
