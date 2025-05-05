@@ -364,7 +364,7 @@ class FireTruckDeleteView(DeleteView):
     success_url = reverse_lazy('firetruck-list')
 
 class WeatherConditionList(ListView):
-    model = FireTruck
+    model = WeatherConditions
     context_object_name = 'weather'
     template_name = 'weather_list.html'
     paginate_by = 5
