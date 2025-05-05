@@ -2,8 +2,7 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from fire.models import Locations, Incident, FireStation
-from fire.models import Locations, Incident
-from fire.forms import LocationsForm, IncidentForm
+from fire.forms import LocationsForm, IncidentForm, FireStationForm
 from django.urls import reverse_lazy
 
 from django.db import connection
@@ -270,3 +269,34 @@ class IncidentDeleteView(DeleteView):
     model = Incident
     template_name = 'incident_del.html'
     success_url = reverse_lazy('incident-list')
+
+class FireStationList(ListView):
+    model = FireStation
+    context_object_name = 'firestation'
+    template_name = 'firestation_list.html'
+    paginate_by = 5
+ 
+    def get_queryset(self, *args, **kwargs):
+        qs = super(FireStationList, self).get_queryset(*args, **kwargs)
+        if self.request.GET.get("q") != None:
+            query = self.request.GET.get('q')
+            qs = qs.filter(Q(name__icontains=query) |
+                        Q(description__icontains=query))
+        return qs
+     
+class FireStationCreateView(CreateView):
+    model = FireStation
+    form_class = FireStationForm
+    template_name = 'firestation_add.html'
+    success_url = reverse_lazy('firestation-list')
+ 
+class FireStationUpdateView(UpdateView):
+    model = FireStation
+    form_class = FireStationForm
+    template_name = 'firestation_edit.html'
+    success_url = reverse_lazy('firestation-list')
+ 
+class FireStationDeleteView(DeleteView):
+    model = FireStation
+    template_name = 'firestation_del.html'
+    success_url = reverse_lazy('firestation-list')

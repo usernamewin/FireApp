@@ -45,6 +45,9 @@ class FireStation(BaseModel):
     city = models.CharField(max_length=150)  # can be in separate table
     country = models.CharField(max_length=150)  # can be in separate table
 
+    def __str__(self):
+ 	    return self.name
+
 
 class Firefighters(BaseModel):
     XP_CHOICES = (
