@@ -47,8 +47,8 @@
                                     <td>{{ object.severity_level }}</td>
                                     <td>{{ object.description }}</td>
                                     <td>
-                                        <a href="incident_list/{{ object.id }}">Edit</a>
-                                        <a href="incident_list/{{ object.id }}/delete" class="text-danger">Delete</a>
+                                        <a href="/incident_list/{{ object.id }}">Edit</a>
+                                        <a href="/incident_list/{{ object.id }}/delete" class="text-danger">Delete</a>
                                     </td>
                                 </tr>
                                 {% empty %}
