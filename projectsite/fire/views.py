@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from fire.models import Locations, Incident, FireStation
-from fire.forms import LocationsForm, IncidentForm, FireStationForm
+from fire.models import Locations, Incident, FireStation, Firefighters, FireTruck, WeatherConditions
+from fire.forms import LocationsForm, IncidentForm, FireStationForm, FirefighterForm, FireTruckForm, WeatherConditionForm
 from django.urls import reverse_lazy
 
 from django.db import connection
@@ -300,3 +300,96 @@ class FireStationDeleteView(DeleteView):
     model = FireStation
     template_name = 'firestation_del.html'
     success_url = reverse_lazy('firestation-list')
+
+class FirefighterList(ListView):
+    model = Firefighters
+    context_object_name = 'firefighter'
+    template_name = 'firefighter_list.html'
+    paginate_by = 5
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super(FirefighterList, self).get_queryset(*args, **kwargs)
+        if self.request.GET.get("q") != None:
+            query = self.request.GET.get('q')
+            qs = qs.filter(Q(name__icontains=query) |
+                        Q(description__icontains=query))
+        return qs
+     
+class FirefighterCreateView(CreateView):
+    model = Firefighters
+    form_class = FirefighterForm
+    template_name = 'firefighter_add.html'
+    success_url = reverse_lazy('firefighter-list')
+
+class FirefighterUpdateView(UpdateView):
+    model = Firefighters
+    form_class = FirefighterForm
+    template_name = 'firefighter_edit.html'
+    success_url = reverse_lazy('firefighter-list')
+ 
+class FirefighterDeleteView(DeleteView):
+    model = Firefighters
+    template_name = 'firefighter_del.html'
+    success_url = reverse_lazy('firefighter-list')
+ 
+class FireTruckList(ListView):
+    model = FireTruck
+    context_object_name = 'firetruck'
+    template_name = 'firetruck_list.html'
+    paginate_by = 5
+ 
+    def get_queryset(self, *args, **kwargs):
+        qs = super(FireTruckList, self).get_queryset(*args, **kwargs)
+        if self.request.GET.get("q") != None:
+            query = self.request.GET.get('q')
+            qs = qs.filter(Q(name__icontains=query) |
+                        Q(description__icontains=query))
+        return qs
+     
+class FireTruckCreateView(CreateView):
+    model = FireTruck
+    form_class = FireTruckForm
+    template_name = 'firetruck_add.html'
+    success_url = reverse_lazy('firetruck-list')
+ 
+class FireTruckUpdateView(UpdateView):
+    model = FireTruck
+    form_class = FireTruckForm
+    template_name = 'firetruck_edit.html'
+    success_url = reverse_lazy('firetruck-list')
+ 
+class FireTruckDeleteView(DeleteView):
+    model = FireTruck
+    template_name = 'firetruck_del.html'
+    success_url = reverse_lazy('firetruck-list')
+
+class WeatherConditionList(ListView):
+    model = FireTruck
+    context_object_name = 'weather'
+    template_name = 'weather_list.html'
+    paginate_by = 5
+ 
+    def get_queryset(self, *args, **kwargs):
+        qs = super(WeatherConditionList, self).get_queryset(*args, **kwargs)
+        if self.request.GET.get("q") != None:
+            query = self.request.GET.get('q')
+            qs = qs.filter(Q(name__icontains=query) |
+                        Q(description__icontains=query))
+        return qs
+     
+class WeatherConditionCreateView(CreateView):
+    model = WeatherConditions
+    form_class = WeatherConditionForm
+    template_name = 'weather_add.html'
+    success_url = reverse_lazy('weather-list')
+ 
+class WeatherConditionUpdateView(UpdateView):
+    model = WeatherConditions
+    form_class = WeatherConditionForm
+    template_name = 'weather_edit.html'
+    success_url = reverse_lazy('weather-list')
+ 
+class WeatherConditionDeleteView(DeleteView):
+    model = WeatherConditions
+    template_name = 'weather_del.html'
+    success_url = reverse_lazy('weather-list')

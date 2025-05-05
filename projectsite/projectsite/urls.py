@@ -30,4 +30,19 @@ urlpatterns = [
     path('firestation_list/add/', a.FireStationCreateView.as_view(), name='firestation-add'),
     path('firestation_list/<pk>', a.FireStationUpdateView.as_view(), name='firestation-update'),
     path('firestation_list/<pk>/delete', a.FireStationDeleteView.as_view(), name='firestation-delete'),
+
+    path('firefighter_list/', a.FirefighterList.as_view(), name='firefighter-list'),
+    path('firefighter_list/add/', a.FirefighterCreateView.as_view(), name='firefighter-add'),
+    path('firefighter_list/<pk>', a.FirefighterUpdateView.as_view(), name='firefighter-update'),
+    path('firefighter_list/<pk>/delete', a.FirefighterDeleteView.as_view(), name='firefighter-delete'),
+
+    path('firetruck_list/', a.FireTruckList.as_view(), name='firetruck-list'),
+    path('firetruck_list/add/', a.FireTruckCreateView.as_view(), name='firetruck-add'),
+    path('firetruck_list/<pk>', a.FireTruckUpdateView.as_view(), name='firetruck-update'),
+    path('firetruck_list/<pk>/delete', a.FireTruckDeleteView.as_view(), name='firetruck-delete'),
+
+    path('weather_list/', a.WeatherConditionList.as_view(), name='weather-list'),
+    path('weather_list/add/', a.WeatherConditionCreateView.as_view(), name='weather-add'),
+    path('weather_list/<pk>', a.WeatherConditionUpdateView.as_view(), name='weather-update'),
+    path('weather_list/<pk>/delete', a.WeatherConditionDeleteView.as_view(), name='weather-delete'),
 ]
